@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+data/security_system.db
+data/security_system.db-shm
+data/security_system.db-wal
+data/faces/*
+!data/faces/.gitkeep
+data/unknown/*
+!data/unknown/.gitkeep
+models/*.yml
+reports/*.csv
+backups/*.db
