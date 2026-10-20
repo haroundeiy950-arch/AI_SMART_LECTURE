@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="two-column meeting-layout">
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">MEETING COPILOT</span><h2>إنشاء ملاحظات اجتماع</h2></div></div>
+    <form id="meetingForm" class="stack-form">
+      <label>عنوان الاجتماع<input id="meetingTitle" required placeholder="Project Graduation Meeting"></label>
+      <label>النص أو التفريغ<textarea id="meetingTranscript" rows="15" required placeholder="الصق نص الاجتماع هنا، أو استخدم صفحة الصوت لتفريغ التسجيل..."></textarea></label>
+      <button class="primary-button" type="submit">تلخيص واستخراج المهام</button>
+    </form>
+    <div id="meetingResult" class="answer-box"><span>سيظهر الملخص والمهام هنا.</span></div>
+  </article>
+
+  <aside class="panel">
+    <div class="panel-header"><div><span class="eyebrow">ARCHIVE</span><h2>الاجتماعات المحفوظة</h2></div></div>
+    <div class="meeting-list">
+    {% for meeting in meetings %}
+      <details><summary>{{ meeting.title }} <small>{{ meeting.created_at.strftime('%Y-%m-%d') }}</small></summary><h4>الملخص</h4><p>{{ meeting.summary }}</p><h4>المهام</h4><pre>{{ meeting.tasks }}</pre></details>
+    {% else %}<p class="empty-state">لا توجد اجتماعات محفوظة.</p>{% endfor %}
+    </div>
+  </aside>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/meeting.js') }}"></script>{% endblock %}

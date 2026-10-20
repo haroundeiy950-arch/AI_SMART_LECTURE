@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-heading"><div><span class="eyebrow">COMPLETE SYSTEM</span><h2>جميع مميزات المشروع</h2><p>نفس فكرة مشروع PowerShell، لكن منظمة في صفحات متصفح احترافية.</p></div></section>
+<section class="feature-table">
+  {% set modules = [
+    ('1','Register new person','/people','يعمل','تسجيل البيانات وصورة الكاميرا'),
+    ('2','Show registered persons','/people','يعمل','عرض قاعدة بيانات الأشخاص'),
+    ('3','Train face model','/people','يعمل اختياريًا','OpenCV LBPH بعد تثبيت requirements-vision.txt'),
+    ('4','Live face recognition','/camera','يعمل اختياريًا','تظهر الأسماء ونسبة التطابق بعد التدريب'),
+    ('5','Delete person','/people','يعمل','صلاحية المدير'),
+    ('6','Translate text','/translation','يعمل','أكثر من عشر لغات عبر AI'),
+    ('7','Text to speech','/voice','يعمل','AI TTS مع صوت المتصفح الاحتياطي'),
+    ('8','Emotion analysis','/camera','يعمل Online','تحليل تعبير مرئي عام فقط'),
+    ('9','Create meeting notes','/meetings','يعمل','تلخيص واستخراج مهام'),
+    ('10','Show meetings','/meetings','يعمل','أرشيف داخل SQLite'),
+    ('11','Project information','/modules','يعمل','هذه الصفحة وخطة README'),
+    ('12','AI Text Assistant','/voice','يعمل','محادثة نص وصوت'),
+    ('13','Security Camera Monitor','/camera','يعمل','حفظ اللقطات والتحليل'),
+    ('14','Project Control / Backup','/settings','يعمل','نسخة ZIP للبيانات'),
+    ('15','Exit','/logout','يعمل','تسجيل خروج آمن'),
+    ('16','Product Marketplace','/products','يعمل','عرض المنتجات والصور والأسعار'),
+    ('17','Backend Product Manager','/backend/products','Admin','رفع وتعديل وحذف المنتجات')
+  ] %}
+  {% for number,name,link,state,description in modules %}
+  <a href="{{ link }}" class="feature-row"><span class="feature-number">{{ number }}</span><div><strong>{{ name }}</strong><p>{{ description }}</p></div><span class="state">{{ state }}</span></a>
+  {% endfor %}
+</section>
+{% endblock %}

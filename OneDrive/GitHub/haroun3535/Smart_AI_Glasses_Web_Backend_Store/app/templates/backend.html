@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-panel backend-hero">
+  <div>
+    <span class="eyebrow">ADMIN BACKEND</span>
+    <h2>مركز إدارة المشروع</h2>
+    <p>صفحة Backend دقيقة لإدارة المنتجات ومراقبة النظام وسجلات الأمان.</p>
+  </div>
+  <div class="hero-actions">
+    <a class="primary-button" href="/backend/products">＋ إضافة منتج</a>
+    <a class="secondary-button" href="/products">فتح السوق</a>
+  </div>
+</section>
+
+<section class="backend-stats">
+  <article class="backend-stat"><span>المستخدمون</span><strong>{{ stats.users }}</strong></article>
+  <article class="backend-stat"><span>كل المنتجات</span><strong>{{ stats.products }}</strong></article>
+  <article class="backend-stat"><span>المنتجات المنشورة</span><strong>{{ stats.active_products }}</strong></article>
+  <article class="backend-stat"><span>الأشخاص</span><strong>{{ stats.people }}</strong></article>
+  <article class="backend-stat"><span>الاجتماعات</span><strong>{{ stats.meetings }}</strong></article>
+  <article class="backend-stat danger-stat"><span>محاولات الدخول المرفوضة</span><strong>{{ stats.failed_logins }}</strong></article>
+</section>
+
+<section class="backend-layout">
+  <article class="panel">
+    <div class="panel-header">
+      <div><span class="eyebrow">RECENT PRODUCTS</span><h2>آخر المنتجات</h2></div>
+      <a class="ghost-button" href="/backend/products">إدارة الكل</a>
+    </div>
+    {% if recent_products %}
+    <div class="compact-product-list">
+      {% for product in recent_products %}
+      <a href="/backend/products/{{ product.id }}/edit" class="compact-product">
+        <div class="compact-product-image">
+          {% if product.image_filename %}
+          <img src="/product-media/{{ product.image_filename }}" alt="{{ product.title }}">
+          {% else %}<span>📦</span>{% endif %}
+        </div>
+        <div><strong>{{ product.title }}</strong><small>{{ product.category }} · {{ product.currency }} {{ '%.2f'|format(product.price_cents / 100) }}</small></div>
+        <span class="state {% if not product.is_active %}state-off{% endif %}">{% if product.is_active %}منشور{% else %}مخفي{% endif %}</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}<p class="empty-state">لا توجد منتجات بعد.</p>{% endif %}
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">SECURITY</span><h2>آخر محاولات الدخول</h2></div></div>
+    {% if recent_attempts %}
+    <div class="security-feed">
+      {% for attempt in recent_attempts %}
+      <div class="security-event">
+        <span class="security-indicator {% if attempt.success %}ok{% else %}bad{% endif %}"></span>
+        <div><strong>{{ attempt.username }}</strong><small>{{ attempt.method }} · {{ attempt.ip_address }}</small></div>
+        <time>{{ attempt.created_at.strftime('%Y-%m-%d %H:%M') if attempt.created_at else '' }}</time>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}<p class="empty-state">لا توجد سجلات.</p>{% endif %}
+  </article>
+</section>
+{% endblock %}

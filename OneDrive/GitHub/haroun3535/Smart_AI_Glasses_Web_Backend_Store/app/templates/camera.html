@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="camera-grid">
+  <article class="panel camera-panel">
+    <div class="panel-header">
+      <div><span class="eyebrow">LIVE VISION</span><h2>الكاميرا الذكية</h2></div>
+      <span id="cameraBadge" class="status-pill">متوقفة</span>
+    </div>
+    <div class="video-frame">
+      <video id="cameraVideo" autoplay playsinline muted></video>
+      <canvas id="captureCanvas" hidden></canvas>
+      <div id="cameraPlaceholder"><span>◉</span><p>اضغط تشغيل للسماح للمتصفح باستخدام الكاميرا.</p></div>
+    </div>
+    <div class="button-row">
+      <button class="primary-button" id="startCamera">تشغيل الكاميرا</button>
+      <button class="secondary-button" id="analyzeFrame" disabled>تحليل المشهد</button>
+      <button class="ghost-button" id="stopCamera" disabled>إيقاف</button>
+    </div>
+    <p class="microcopy">المتصفح سيطلب إذن الكاميرا. لا تُرفع الصورة إلا عند الضغط على تحليل المشهد.</p>
+  </article>
+
+  <aside class="panel analysis-panel">
+    <div class="panel-header"><div><span class="eyebrow">AI ANALYSIS</span><h2>نتيجة التحليل</h2></div></div>
+    <dl id="analysisResult" class="analysis-list">
+      <div><dt>المشهد</dt><dd id="sceneResult">لا توجد نتيجة.</dd></div>
+      <div><dt>الأشياء</dt><dd id="objectsResult">—</dd></div>
+      <div><dt>النص المرئي</dt><dd id="textResult">—</dd></div>
+      <div><dt>عدد الأشخاص</dt><dd id="peopleResult">—</dd></div>
+      <div><dt>التعرف المحلي على الوجوه</dt><dd id="facesResult">—</dd></div><div><dt>التعبير العام</dt><dd id="emotionResult">—</dd></div>
+      <div><dt>تنبيهات السلامة</dt><dd id="safetyResult">—</dd></div>
+    </dl>
+  </aside>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/camera.js') }}"></script>{% endblock %}

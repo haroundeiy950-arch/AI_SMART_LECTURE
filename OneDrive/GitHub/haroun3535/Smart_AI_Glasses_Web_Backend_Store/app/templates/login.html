@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="login-layout">
+  <div class="login-visual">
+    <div class="radar"><span></span><span></span><span></span><i>AI</i></div>
+    <h1>Smart AI Glasses</h1>
+    <p>رؤية حاسوبية، ترجمة، مساعد صوتي، اجتماعات وأمان في منصة واحدة.</p>
+    <div class="feature-row"><span>✓ Windows Hello</span><span>✓ AI Voice</span><span>✓ Live Camera</span></div>
+  </div>
+
+  <div class="login-card">
+    <div class="card-heading">
+      <span class="eyebrow">SECURE ACCESS</span>
+      <h2>تسجيل الدخول</h2>
+      <p>استخدم كلمة المرور، أو Windows Hello بعد تسجيل البصمة من الإعدادات.</p>
+    </div>
+
+    {% if request.query_params.get('error') == 'invalid' %}
+      <div class="alert danger">اسم المستخدم أو كلمة المرور غير صحيحة.</div>
+    {% elif request.query_params.get('error') == 'locked' %}
+      <div class="alert danger">تم إيقاف المحاولات مؤقتًا لمدة خمس دقائق.</div>
+    {% endif %}
+
+    <form class="stack-form" method="post" action="/login" id="loginForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>اسم المستخدم
+        <input id="username" name="username" autocomplete="username" required placeholder="admin">
+      </label>
+      <label>كلمة المرور
+        <div class="password-field">
+          <input id="password" type="password" name="password" autocomplete="current-password" required placeholder="••••••••••">
+          <button type="button" id="togglePassword">👁</button>
+        </div>
+      </label>
+      <button class="primary-button" type="submit">دخول آمن</button>
+    </form>
+
+    <div class="divider"><span>أو</span></div>
+    <button class="secondary-button" id="passkeyLogin" type="button">🫆 الدخول بالبصمة / Windows Hello</button>
+    <p class="microcopy">يجب تسجيل Passkey أولًا من صفحة الأمان بعد الدخول بكلمة المرور.</p>
+
+    <div class="demo-credentials">
+      <strong>الدخول الأول:</strong>
+      <span>Username: admin</span>
+      <span>Password: ChangeMe@12345</span>
+      <small>غيّرها من ملف .env قبل العرض النهائي.</small>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/passkeys.js') }}"></script>{% endblock %}

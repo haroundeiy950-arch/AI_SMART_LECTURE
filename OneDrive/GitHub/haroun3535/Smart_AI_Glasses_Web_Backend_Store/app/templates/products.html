@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-panel store-hero">
+  <div>
+    <span class="eyebrow">SMART MARKETPLACE</span>
+    <h2>سوق المنتجات</h2>
+    <p>تلفونات، لابتوبات، ملابس وأدوات مع السعر والكمية ومعلومات التواصل.</p>
+  </div>
+  {% if user.role == 'admin' %}
+  <a class="primary-button" href="/backend/products">＋ رفع منتج جديد</a>
+  {% endif %}
+</section>
+
+<form class="catalog-toolbar panel" method="get" action="/products">
+  <label>البحث
+    <input name="q" value="{{ q }}" placeholder="ابحث باسم المنتج أو الموقع">
+  </label>
+  <label>الفئة
+    <select name="category">
+      <option value="">كل الفئات</option>
+      {% for key,label in categories %}<option value="{{ key }}" {% if selected_category == key %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </label>
+  <button class="primary-button" type="submit">بحث</button>
+  <a class="ghost-button" href="/products">إلغاء الفلتر</a>
+</form>
+
+<section class="product-grid">
+  {% for product in products %}
+  <article class="product-card {% if product.is_featured %}featured-product{% endif %}">
+    <div class="product-image">
+      {% if product.image_filename %}
+      <img src="/product-media/{{ product.image_filename }}" alt="{{ product.title }}">
+      {% else %}<span>📱</span>{% endif %}
+      {% if product.is_featured %}<b class="featured-badge">مميز</b>{% endif %}
+      <span class="condition-badge">{{ dict(conditions).get(product.condition, product.condition) }}</span>
+    </div>
+    <div class="product-body">
+      <div class="product-meta"><span>{{ dict(categories).get(product.category, product.category) }}</span><span>الكمية: {{ product.quantity }}</span></div>
+      <h3>{{ product.title }}</h3>
+      <p>{{ product.description or 'لا يوجد وصف إضافي لهذا المنتج.' }}</p>
+      <div class="product-location">📍 {{ product.location or 'الموقع غير محدد' }}</div>
+      <div class="product-bottom">
+        <strong class="product-price">{{ product.currency }} {{ format_price(product.price_cents) }}</strong>
+        {% if product.whatsapp %}
+        <a class="secondary-button product-contact" href="https://wa.me/{{ product.whatsapp|replace('+','')|replace(' ','') }}" target="_blank" rel="noopener">WhatsApp</a>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+  {% else %}
+  <div class="panel empty-catalog"><span>🛒</span><h2>لا توجد منتجات</h2><p>أضف أول منتج من صفحة إدارة المنتجات.</p></div>
+  {% endfor %}
+</section>
+{% endblock %}

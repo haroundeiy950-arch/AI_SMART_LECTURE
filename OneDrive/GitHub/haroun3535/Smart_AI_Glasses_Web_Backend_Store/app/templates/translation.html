@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="panel translation-panel">
+  <div class="panel-header">
+    <div>
+      <span class="eyebrow">MULTILINGUAL</span>
+      <h2>الترجمة الذكية</h2>
+      <p class="microcopy">تعمل الترجمة بدون مفتاح OpenAI، لكنها تحتاج اتصالًا بالإنترنت.</p>
+    </div>
+  </div>
+
+  <div class="translation-grid">
+    <div>
+      <label>
+        النص الأصلي
+        <textarea id="sourceText" rows="12" placeholder="اكتب أو الصق النص هنا..."></textarea>
+      </label>
+    </div>
+
+    <div class="translation-controls">
+      <label>
+        لغة النص الأصلي
+        <select id="sourceLanguage">
+          <option value="auto" selected>اكتشاف تلقائي</option>
+          {% for language in languages %}
+          <option value="{{ language.code }}">{{ language.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>
+        اللغة المطلوبة
+        <select id="targetLanguage">
+          {% for language in languages %}
+          <option value="{{ language.code }}" {% if language.code == 'fr' %}selected{% endif %}>
+            {{ language.name }}
+          </option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <button id="translateButton" class="primary-button" type="button">ترجمة ←</button>
+      <button id="speakTranslation" class="secondary-button" type="button">🔊 نطق الترجمة</button>
+      <button id="stopSpeech" class="ghost-button" type="button">⏹ إيقاف الصوت</button>
+
+      <div id="voiceNotice" class="microcopy"></div>
+    </div>
+
+    <div>
+      <label>
+        النتيجة
+        <textarea id="translatedText" rows="12" readonly placeholder="ستظهر الترجمة هنا..."></textarea>
+      </label>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/translation.js') }}"></script>
+{% endblock %}

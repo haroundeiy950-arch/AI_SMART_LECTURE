@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="two-column voice-layout">
+  <article class="panel voice-console">
+    <div class="panel-header">
+      <div><span class="eyebrow">NATURAL AI VOICE</span><h2>تحدث مع النظارة</h2></div>
+      <span class="live-dot">AI-generated voice</span>
+    </div>
+
+    <div class="voice-orb" id="voiceOrb"><span></span><i>AI</i></div>
+    <p id="voiceStatus" class="center-text">اكتب رسالتك أو اضغط الميكروفون.</p>
+
+    <div class="form-row">
+      <label>لغة الرد
+        <select id="language">
+          <option value="ar">العربية</option><option value="en">English</option>
+          <option value="fr">Français</option><option value="rw">Kinyarwanda</option>
+        </select>
+      </label>
+      <label>الصوت
+        <select id="voice">
+          <option value="coral">Coral</option><option value="marin">Marin</option>
+          <option value="cedar">Cedar</option><option value="alloy">Alloy</option>
+          <option value="nova">Nova</option>
+        </select>
+      </label>
+    </div>
+
+    <textarea id="message" rows="5" placeholder="مثال: ماذا يوجد أمامي؟ أو ترجم هذه الجملة..."></textarea>
+    <div class="button-row">
+      <button class="primary-button" id="sendMessage">إرسال وتشغيل الصوت</button>
+      <button class="secondary-button" id="recordButton">🎤 تسجيل مباشر</button>
+      <button class="ghost-button" id="stopAudio">■ إيقاف</button>
+    </div>
+
+    <div class="answer-box" id="answerBox">
+      <span>رد المساعد سيظهر هنا.</span>
+    </div>
+  </article>
+
+  <aside class="panel history-panel">
+    <div class="panel-header"><div><span class="eyebrow">RECENT</span><h2>آخر المحادثات</h2></div></div>
+    <div id="historyList" class="history-list">
+      {% for item in history %}
+      <article><strong>أنت</strong><p>{{ item.user_text }}</p><strong>AI</strong><p>{{ item.assistant_text }}</p></article>
+      {% else %}<p class="empty-state">لا توجد محادثات حتى الآن.</p>{% endfor %}
+    </div>
+  </aside>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/voice.js') }}"></script>{% endblock %}

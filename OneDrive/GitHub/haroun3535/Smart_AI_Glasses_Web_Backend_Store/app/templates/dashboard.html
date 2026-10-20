@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero-panel">
+  <div>
+    <span class="eyebrow">GRADUATION PROJECT PLATFORM</span>
+    <h2>مرحبًا {{ current.display_name }}</h2>
+    <p>ابدأ الكاميرا، تحدّث مع المساعد، أو افتح إحدى وحدات النظام.</p>
+  </div>
+  <div class="hero-actions">
+    <a class="primary-button" href="/camera">تشغيل الكاميرا</a>
+    <a class="secondary-button" href="/voice">فتح AI Voice</a>
+  </div>
+</section>
+
+<section class="stats-grid">
+  <article class="stat-card"><span>الأشخاص المسجلون</span><strong>{{ stats.people }}</strong><small>Face database</small></article>
+  <article class="stat-card"><span>الاجتماعات</span><strong>{{ stats.meetings }}</strong><small>Saved notes</small></article>
+  <article class="stat-card"><span>محادثات AI</span><strong>{{ stats.conversations }}</strong><small>Voice and text</small></article>
+  <article class="stat-card"><span>المنتجات</span><strong>{{ stats.products }}</strong><small>Marketplace items</small></article>
+  <article class="stat-card"><span>محاولات مرفوضة</span><strong>{{ stats.failed_logins }}</strong><small>Security events</small></article>
+</section>
+
+<section class="section-heading"><div><span class="eyebrow">CORE MODULES</span><h2>الوحدات الرئيسية</h2></div></section>
+<section class="module-grid">
+  <a class="module-card accent" href="/voice"><span class="module-icon">🎙</span><h3>AI Voice Assistant</h3><p>صوت طبيعي، كتابة، ميكروفون وحفظ المحادثة.</p><b>فتح الوحدة ←</b></a>
+  <a class="module-card" href="/camera"><span class="module-icon">◉</span><h3>Smart Camera</h3><p>تحليل المشهد، الأشياء، النصوص والتنبيهات.</p><b>فتح الوحدة ←</b></a>
+  <a class="module-card" href="/people"><span class="module-icon">👤</span><h3>People & Faces</h3><p>تسجيل الأشخاص والصور وربط محرك التعرف لاحقًا.</p><b>فتح الوحدة ←</b></a>
+  <a class="module-card" href="/meetings"><span class="module-icon">▤</span><h3>Meeting Assistant</h3><p>تلخيص الاجتماع واستخراج المهام وحفظ السجل.</p><b>فتح الوحدة ←</b></a>
+  <a class="module-card" href="/translation"><span class="module-icon">文</span><h3>Translation</h3><p>ترجمة النص وتشغيل النتيجة بالصوت.</p><b>فتح الوحدة ←</b></a>
+  <a class="module-card" href="/products"><span class="module-icon">🛍</span><h3>Product Marketplace</h3><p>عرض تلفونات ولابتوبات وملابس مع السعر والصورة.</p><b>فتح السوق ←</b></a>
+  <a class="module-card" href="/settings"><span class="module-icon">🫆</span><h3>Secure Access</h3><p>كلمة مرور وPasskey وWindows Hello ونسخ احتياطي.</p><b>فتح الوحدة ←</b></a>
+</section>
+{% endblock %}

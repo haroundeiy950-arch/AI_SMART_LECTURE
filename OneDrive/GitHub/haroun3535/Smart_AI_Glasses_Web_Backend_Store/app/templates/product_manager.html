@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-heading">
+  <div><span class="eyebrow">PRODUCT BACKEND</span><h2>إدارة المنتجات</h2><p>ارفع صورة المنتج وأدخل الاسم والسعر والكمية ومعلومات التواصل.</p></div>
+  <a class="secondary-button" href="/products">معاينة السوق</a>
+</section>
+
+{% if request.query_params.get('created') %}<div class="alert success">تمت إضافة المنتج بنجاح.</div>{% endif %}
+{% if request.query_params.get('updated') %}<div class="alert success">تم تحديث المنتج بنجاح.</div>{% endif %}
+{% if request.query_params.get('deleted') %}<div class="alert warning">تم حذف المنتج.</div>{% endif %}
+
+<section class="product-admin-layout">
+  <article class="panel sticky-product-form">
+    <div class="panel-header"><div><span class="eyebrow">ADD PRODUCT</span><h2>رفع منتج جديد</h2></div></div>
+    <form class="stack-form" method="post" action="/backend/products" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label>اسم المنتج
+        <input name="title" required maxlength="180" placeholder="مثال: Samsung Galaxy S24">
+      </label>
+      <div class="form-row">
+        <label>الفئة
+          <select name="category" required>{% for key,label in categories %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select>
+        </label>
+        <label>الحالة
+          <select name="condition">{% for key,label in conditions %}<option value="{{ key }}">{{ label }}</option>{% endfor %}</select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>السعر
+          <input name="price" type="number" min="0" step="0.01" required placeholder="15.05">
+        </label>
+        <label>العملة
+          <select name="currency">{% for currency in currencies %}<option value="{{ currency }}">{{ currency }}</option>{% endfor %}</select>
+        </label>
+      </div>
+      <div class="form-row">
+        <label>الكمية
+          <input name="quantity" type="number" min="0" value="1" required>
+        </label>
+        <label>الموقع
+          <input name="location" maxlength="160" placeholder="Rwanda - Kigali">
+        </label>
+      </div>
+      <label>رقم WhatsApp
+        <input name="whatsapp" maxlength="80" placeholder="2507XXXXXXXX">
+      </label>
+      <label>الوصف
+        <textarea name="description" rows="5" maxlength="5000" placeholder="مواصفات المنتج، اللون، الذاكرة، الضمان..."></textarea>
+      </label>
+      <label>صورة المنتج
+        <input name="image" type="file" accept="image/jpeg,image/png,image/webp">
+        <small class="field-help">JPG أو PNG أو WEBP، بحد أقصى 5MB.</small>
+      </label>
+      <div class="checkbox-row">
+        <label class="check-option"><input type="checkbox" name="is_active" checked> نشر المنتج في السوق</label>
+        <label class="check-option"><input type="checkbox" name="is_featured"> منتج مميز</label>
+      </div>
+      <button class="primary-button" type="submit">حفظ ونشر المنتج</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">INVENTORY</span><h2>قائمة المنتجات</h2></div><span class="status-pill online">{{ products|length }} منتج</span></div>
+    <div class="table-wrap">
+      <table class="product-table">
+        <thead><tr><th>الصورة</th><th>المنتج</th><th>السعر</th><th>الكمية</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
+        <tbody>
+          {% for product in products %}
+          <tr>
+            <td><div class="table-product-image">{% if product.image_filename %}<img src="/product-media/{{ product.image_filename }}" alt="">{% else %}<span>📦</span>{% endif %}</div></td>
+            <td><strong>{{ product.title }}</strong><small>{{ dict(categories).get(product.category, product.category) }}</small></td>
+            <td>{{ product.currency }} {{ format_price(product.price_cents) }}</td>
+            <td>{{ product.quantity }}</td>
+            <td><span class="state {% if not product.is_active %}state-off{% endif %}">{% if product.is_active %}منشور{% else %}مخفي{% endif %}</span></td>
+            <td>
+              <div class="table-actions">
+                <a class="ghost-button small-button" href="/backend/products/{{ product.id }}/edit">تعديل</a>
+                <form method="post" action="/backend/products/{{ product.id }}/toggle"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="secondary-button small-button" type="submit">{% if product.is_active %}إخفاء{% else %}نشر{% endif %}</button></form>
+                <form method="post" action="/backend/products/{{ product.id }}/delete" onsubmit="return confirm('هل تريد حذف المنتج نهائيًا؟')"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button class="danger-button small-button" type="submit">حذف</button></form>
+              </div>
+            </td>
+          </tr>
+          {% else %}<tr><td colspan="6" class="empty-state">لا توجد منتجات.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+{% endblock %}

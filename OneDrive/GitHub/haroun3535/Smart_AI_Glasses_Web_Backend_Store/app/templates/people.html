@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="two-column people-layout">
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">REGISTRATION</span><h2>تسجيل شخص جديد</h2></div></div>
+    <form id="personForm" class="stack-form">
+      <div class="form-row">
+        <label>كود الشخص<input id="personCode" required placeholder="P001"></label>
+        <label>الاسم الكامل<input id="personName" required placeholder="Haroun Mohammed"></label>
+      </div>
+      <label>القسم أو الصفة<input id="personDepartment" placeholder="Computer Science"></label>
+      <label>ملاحظات<textarea id="personNotes" rows="3"></textarea></label>
+      <div class="photo-capture">
+        <video id="personVideo" autoplay playsinline muted></video>
+        <canvas id="personCanvas" hidden></canvas>
+        <img id="personPreview" alt="صورة الشخص" hidden>
+      </div>
+      <div class="button-row">
+        <button type="button" class="secondary-button" id="openPersonCamera">فتح الكاميرا</button>
+        <button type="button" class="ghost-button" id="capturePerson" disabled>التقاط الصورة</button>
+        <button type="submit" class="primary-button">حفظ الشخص</button>
+      </div>
+    </form>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">DATABASE</span><h2>الأشخاص المسجلون</h2></div><button id="trainFaceModel" class="secondary-button">تدريب نموذج الوجه</button></div>
+    <div class="table-wrap">
+      <table><thead><tr><th>الكود</th><th>الاسم</th><th>القسم</th><th>العينات</th><th>إجراء</th></tr></thead>
+      <tbody>
+      {% for person in people %}
+        <tr><td>{{ person.code }}</td><td>{{ person.full_name }}</td><td>{{ person.department or '—' }}</td><td><button class="ghost-button collect-samples" data-id="{{ person.id }}">التقاط 20 صورة</button></td><td><button class="danger-button delete-person" data-id="{{ person.id }}">حذف</button></td></tr>
+      {% else %}<tr><td colspan="5">لا يوجد أشخاص مسجلون.</td></tr>{% endfor %}
+      </tbody></table>
+    </div>
+    <div class="info-box">ثبّت requirements-vision.txt، افتح الكاميرا، التقط 20 عينة لكل شخص، ثم اضغط تدريب نموذج الوجه. بعد ذلك ستظهر الأسماء داخل صفحة الكاميرا.</div>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/people.js') }}"></script>{% endblock %}

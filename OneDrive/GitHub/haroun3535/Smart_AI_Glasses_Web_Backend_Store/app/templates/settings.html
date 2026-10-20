@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="settings-grid">
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">PASSKEY SECURITY</span><h2>البصمة وWindows Hello</h2></div></div>
+    <p>بعد تسجيل Passkey، يمكنك الدخول من صفحة Login باستخدام بصمة الجهاز أو PIN أو Windows Hello.</p>
+    <button id="registerPasskey" class="primary-button">🫆 تسجيل Windows Hello لهذا الحساب</button>
+    <div class="registered-keys">
+      <h3>الأجهزة المسجلة</h3>
+      {% for key in passkeys %}<div class="key-item"><span>🔐</span><div><strong>{{ key.label }}</strong><small>{{ key.device_type }} · {{ key.created_at.strftime('%Y-%m-%d') }}</small></div></div>
+      {% else %}<p class="empty-state">لا يوجد Passkey مسجل.</p>{% endfor %}
+    </div>
+    <div class="alert warning">افتح المشروع دائمًا عبر <b>http://localhost:8000</b> عند استخدام Windows Hello.</div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">PASSWORD</span><h2>تغيير كلمة المرور</h2></div></div>
+    <form id="changePasswordForm" class="stack-form">
+      <label>كلمة المرور الحالية<input id="currentPassword" type="password" autocomplete="current-password" required></label>
+      <label>كلمة المرور الجديدة<input id="newPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+      <label>تأكيد كلمة المرور<input id="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+      <button class="secondary-button" type="submit">حفظ كلمة المرور الجديدة</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">AI CONFIGURATION</span><h2>حالة الذكاء الاصطناعي</h2></div></div>
+    <div class="config-status {% if ai_enabled %}enabled{% endif %}">
+      <span>{% if ai_enabled %}✓{% else %}!{% endif %}</span>
+      <div><strong>{% if ai_enabled %}AI Online مفعّل{% else %}الوضع المحلي فقط{% endif %}</strong><p>{% if ai_enabled %}المحادثة والصوت والتحليل المتقدم جاهزة.{% else %}أضف OPENAI_API_KEY داخل .env لتفعيل الصوت الطبيعي والتحليل.{% endif %}</p></div>
+    </div>
+    <pre class="code-box">OPENAI_API_KEY=ضع_المفتاح_هنا
+AI_TEXT_MODEL=gpt-5-mini
+AI_VOICE_MODEL=gpt-4o-mini-tts</pre>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">DATA CONTROL</span><h2>النسخ الاحتياطي والخصوصية</h2></div></div>
+    <p>ينشئ ملف ZIP لقاعدة البيانات والصور والاجتماعات. ملف .env لا يدخل في النسخة لحماية المفتاح.</p>
+    <a class="secondary-button inline-button" href="/api/backup">تنزيل نسخة احتياطية</a>
+  </article>
+
+  <article class="panel">
+    <div class="panel-header"><div><span class="eyebrow">PRODUCTION CHECKLIST</span><h2>قبل عرض التخرج</h2></div></div>
+    <ul class="check-list"><li>تغيير كلمة مرور المدير والمفتاح السري.</li><li>تشغيل HTTPS عند النشر خارج localhost.</li><li>إضافة صور تدريب متعددة لكل شخص.</li><li>تجربة الكاميرا والميكروفون قبل العرض.</li><li>إخفاء API key وعدم وضعه داخل JavaScript.</li></ul>
+  </article>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', path='js/passkeys.js') }}"></script><script src="{{ url_for('static', path='js/settings.js') }}"></script>{% endblock %}
