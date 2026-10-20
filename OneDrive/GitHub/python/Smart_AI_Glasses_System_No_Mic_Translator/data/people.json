@@ -1,0 +1,23 @@
+{
+    "ahmed": {
+        "type": "private",
+        "name": "Ahmed Ali",
+        "job": "Student / Friend",
+        "basic_info": "University colleague",
+        "last_notes": "AI glasses project discussion"
+    },
+    "dr_lecturer": {
+        "type": "public",
+        "name": "Dr. John",
+        "job": "Lecturer",
+        "basic_info": "Computer Science lecturer",
+        "last_notes": "Artificial Intelligence lecture"
+    },
+    "sara_manager": {
+        "type": "private",
+        "name": "Sara Mohamed",
+        "job": "Manager",
+        "basic_info": "Project manager",
+        "last_notes": "Review project progress"
+    }
+}

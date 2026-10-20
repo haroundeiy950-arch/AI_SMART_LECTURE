@@ -1,0 +1,14 @@
+opencv-contrib-python
+numpy
+pillow
+pytesseract
+SpeechRecognition
+pyttsx3
+googletrans==4.0.0-rc1
+ultralytics
+deepface
+mysql-connector-python
+python-dotenv
+
+gTTS
+pygame
