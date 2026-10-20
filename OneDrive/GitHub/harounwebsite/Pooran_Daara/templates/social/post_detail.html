@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.details }} | Pooran Daara{% endblock %}
+{% block content %}<section class="narrow-section"><div class="container narrow-container">
+{% include "social/includes/post_card.html" with post=post liked=liked %}
+<section class="comments-card card"><h2>{{ ui.comments }}</h2>
+{% if user.is_authenticated %}<form class="stack-form" method="post" action="{% url 'add_comment' post.pk %}">{% csrf_token %}{{ comment_form.body }}<button class="button" type="submit">{{ ui.add_comment }}</button></form>{% endif %}
+<div class="comments-list">{% for comment in visible_comments %}<article class="comment"><div class="avatar small">{{ comment.author.username|first|upper }}</div><div class="comment-body"><strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong><time>{{ comment.created_at|timesince }}</time><p>{{ comment.body|linebreaksbr }}</p>{% if user == comment.author or user == post.author or user.is_staff %}<form method="post" action="{% url 'delete_comment' comment.pk %}">{% csrf_token %}<button class="danger-link" type="submit">{{ ui.delete }}</button></form>{% else %}<a class="text-link" href="{% url 'report_target' 'comment' comment.pk %}">{{ ui.report }}</a>{% endif %}</div></article>{% empty %}<p class="muted">{{ ui.no_posts }}</p>{% endfor %}</div>
+</section></div></section>{% endblock %}

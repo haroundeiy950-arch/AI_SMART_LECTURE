@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ ui.home|default:"الرئيسية" }} | Pooran Daara
+{% endblock %}
+
+{% block content %}
+
+<section class="feed-section">
+    <div class="container feed-layout">
+
+        <!-- الملف الشخصي -->
+        <aside class="profile-sidebar card">
+
+            <div class="avatar large">
+                {% if user.profile.avatar %}
+                    <img
+                        src="{{ user.profile.avatar.url }}"
+                        alt="{{ user.username }}"
+                    >
+                {% else %}
+                    {{ user.username|first|upper }}
+                {% endif %}
+            </div>
+
+            <h2>
+                {{ user.get_full_name|default:user.username }}
+            </h2>
+
+            <p class="muted">
+                @{{ user.username }}
+            </p>
+
+            {% if user.profile.bio %}
+                <p>{{ user.profile.bio }}</p>
+            {% else %}
+                <p class="muted">
+                    {{ ui.no_bio|default:"لا توجد نبذة شخصية." }}
+                </p>
+            {% endif %}
+
+            <a
+                class="button secondary full"
+                href="{% url 'profile' user.username %}"
+            >
+                {{ ui.view_profile|default:"عرض ملفي" }}
+            </a>
+
+            <a
+                class="text-link"
+                href="{% url 'edit_profile' %}"
+            >
+                {{ ui.edit_profile|default:"تعديل الملف الشخصي" }}
+            </a>
+
+        </aside>
+
+        <!-- المنشورات -->
+        <main class="feed-main">
+
+            <!-- إنشاء منشور -->
+            <section class="composer card">
+
+                <div class="composer-head">
+
+                    <div class="avatar small">
+                        {% if user.profile.avatar %}
+                            <img
+                                src="{{ user.profile.avatar.url }}"
+                                alt="{{ user.username }}"
+                            >
+                        {% else %}
+                            {{ user.username|first|upper }}
+                        {% endif %}
+                    </div>
+
+                    <strong>
+                        {{ ui.share_useful|default:"شارك شيئًا مفيدًا" }}
+                    </strong>
+
+                </div>
+
+                <form
+                    method="post"
+                    action="{% url 'create_post' %}"
+                    enctype="multipart/form-data"
+                    class="stack-form"
+                >
+                    {% csrf_token %}
+
+                    {% if post_form.non_field_errors %}
+                        <div class="media-error">
+                            {{ post_form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="content-field">
+                        {{ post_form.content }}
+                        {{ post_form.content.errors }}
+                    </div>
+
+                    <!-- معاينة الصورة -->
+                    <img
+                        id="image-preview"
+                        class="upload-preview image-preview"
+                        alt="معاينة الصورة"
+                    >
+
+                    <!-- معاينة الفيديو -->
+                    <video
+                        id="video-preview"
+                        class="upload-preview video-preview"
+                        controls
+                        muted
+                        playsinline
+                    ></video>
+
+                    <!-- اختيار الصورة والفيديو -->
+                    <div class="media-upload-grid">
+
+                        <label class="media-upload-label">
+                            <span>📷 إضافة صورة</span>
+                            {{ post_form.image }}
+                        </label>
+
+                        <label class="media-upload-label">
+                            <span>🎬 إضافة فيديو</span>
+                            {{ post_form.video }}
+                        </label>
+
+                    </div>
+
+                    {% if post_form.image.errors %}
+                        <div class="media-error">
+                            {{ post_form.image.errors }}
+                        </div>
+                    {% endif %}
+
+                    {% if post_form.video.errors %}
+                        <div class="media-error">
+                            {{ post_form.video.errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="composer-actions">
+
+                        <span class="muted">
+                            الصورة حتى 10 MB، والفيديو حتى 100 MB
+                        </span>
+
+                        <button
+                            class="button"
+                            type="submit"
+                        >
+                            {{ ui.publish|default:"نشر" }}
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+            <!-- قائمة المنشورات -->
+            {% for post in posts %}
+
+                {% include "social/includes/post_card.html" with post=post liked_ids=liked_ids %}
+
+            {% empty %}
+
+                <div class="empty-state card">
+                    <span>🌱</span>
+
+                    <h3>
+                        {{ ui.no_posts|default:"لا توجد منشورات حتى الآن" }}
+                    </h3>
+
+                    <p>
+                        {{ ui.first_post|default:"كن أول شخص ينشر في المنصة." }}
+                    </p>
+                </div>
+
+            {% endfor %}
+
+            {% include "social/includes/pagination.html" with page_obj=posts %}
+
+        </main>
+
+        <!-- قواعد المجتمع -->
+        <aside class="info-sidebar card">
+
+            <h3>
+                {{ ui.community_rules|default:"قواعد المجتمع" }}
+            </h3>
+
+            <ul class="rules-list">
+                <li>
+                    {{ ui.rule_1|default:"احترم جميع المستخدمين." }}
+                </li>
+
+                <li>
+                    {{ ui.rule_2|default:"انشر محتوى مفيدًا وصحيحًا." }}
+                </li>
+
+                <li>
+                    {{ ui.rule_3|default:"لا تنشر البيانات الخاصة." }}
+                </li>
+
+                <li>
+                    {{ ui.rule_4|default:"تجنب الإساءة والمحتوى المضلل." }}
+                </li>
+            </ul>
+
+            <a
+                class="button secondary full"
+                href="{% url 'ai_tools' %}"
+            >
+                🤖 {{ ui.ai_tools|default:"أدوات الذكاء الاصطناعي" }}
+            </a>
+
+        </aside>
+
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const imageInput = document.querySelector(
+        'input[name="image"]'
+    );
+
+    const videoInput = document.querySelector(
+        'input[name="video"]'
+    );
+
+    const imagePreview = document.getElementById(
+        "image-preview"
+    );
+
+    const videoPreview = document.getElementById(
+        "video-preview"
+    );
+
+    let imageObjectUrl = null;
+    let videoObjectUrl = null;
+
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (imageObjectUrl) {
+                URL.revokeObjectURL(imageObjectUrl);
+                imageObjectUrl = null;
+            }
+
+            if (!file) {
+                imagePreview.removeAttribute("src");
+                imagePreview.classList.remove("show");
+                return;
+            }
+
+            imageObjectUrl = URL.createObjectURL(file);
+
+            imagePreview.src = imageObjectUrl;
+            imagePreview.classList.add("show");
+        });
+    }
+
+    if (videoInput && videoPreview) {
+        videoInput.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (videoObjectUrl) {
+                URL.revokeObjectURL(videoObjectUrl);
+                videoObjectUrl = null;
+            }
+
+            if (!file) {
+                videoPreview.pause();
+                videoPreview.removeAttribute("src");
+                videoPreview.classList.remove("show");
+                return;
+            }
+
+            videoObjectUrl = URL.createObjectURL(file);
+
+            videoPreview.src = videoObjectUrl;
+            videoPreview.classList.add("show");
+            videoPreview.load();
+        });
+    }
+});
+</script>
+
+{% endblock %}

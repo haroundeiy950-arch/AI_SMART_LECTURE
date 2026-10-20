@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.search }} | Pooran Daara{% endblock %}
+{% block content %}<section class="narrow-section"><div class="container narrow-container">
+<form class="search-page-form card" method="get"><input type="search" name="q" value="{{ query }}" placeholder="{{ ui.search_placeholder }}"><button class="button" type="submit">{{ ui.search }}</button></form>
+{% if query %}<h2 class="content-title">{{ ui.user_results }}</h2><div class="people-grid">{% for item in users %}<a class="person-card card" href="{% url 'profile' item.username %}"><div class="avatar medium">{{ item.username|first|upper }}</div><div><strong>{{ item.get_full_name|default:item.username }}</strong><span>@{{ item.username }}</span></div></a>{% empty %}<p class="muted">{{ ui.no_users }}</p>{% endfor %}</div><h2 class="content-title">{{ ui.post_results }}</h2>{% for post in posts %}{% include "social/includes/post_card.html" with post=post %}{% empty %}<p class="muted">{{ ui.no_matching_posts }}</p>{% endfor %}{% else %}<div class="empty-state card"><span>🔎</span><h2>{{ ui.search_community }}</h2><p>{{ ui.search_help }}</p></div>{% endif %}
+</div></section>{% endblock %}

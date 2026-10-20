@@ -1,0 +1,6 @@
+Django>=5.2,<5.3
+Pillow>=11.0,<13.0
+channels[daphne]>=4.3,<4.4
+channels-redis>=4.3,<5.0
+openai>=2.0,<3.0
+python-dotenv>=1.0,<2.0

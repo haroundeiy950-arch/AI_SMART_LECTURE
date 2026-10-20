@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Pooran Daara{% endblock %}
+{% block content %}
+<section class="hero"><div class="container hero-grid">
+    <div class="hero-copy"><span class="eyebrow">{{ ui.landing_eyebrow }}</span><h1>{{ ui.landing_title }}</h1><p>{{ ui.landing_text }}</p>
+        <div class="hero-actions"><a class="button" href="{% url 'register' %}">{{ ui.start_now }}</a><a class="button secondary" href="{% url 'login' %}">{{ ui.have_account }}</a></div>
+    </div>
+    <div class="hero-card"><div class="hero-orb">P</div><div class="floating-card card-one">💬 {{ ui.feature_chat }}</div><div class="floating-card card-two">🤖 {{ ui.feature_ai }}</div><div class="floating-card card-three">🛡️ {{ ui.feature_moderation }}</div></div>
+</div></section>
+<section class="feature-section"><div class="container feature-grid">
+    <article class="feature-card"><span>⚡</span><h3>{{ ui.feature_chat }}</h3></article>
+    <article class="feature-card"><span>🌍</span><h3>{{ ui.feature_languages }}</h3></article>
+    <article class="feature-card"><span>🤖</span><h3>{{ ui.feature_ai }}</h3></article>
+    <article class="feature-card"><span>🛡️</span><h3>{{ ui.feature_moderation }}</h3></article>
+</div></section>
+{% if recent_posts %}<section class="public-posts"><div class="container"><h2>{{ ui.active_posts }}</h2><div class="public-post-grid">{% for post in recent_posts %}<article class="card preview-post"><strong>{{ post.author.get_full_name|default:post.author.username }}</strong><p>{{ post.content|truncatechars:180 }}</p></article>{% endfor %}</div></div></section>{% endif %}
+{% endblock %}

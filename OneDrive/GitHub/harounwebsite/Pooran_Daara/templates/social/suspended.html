@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.account_suspended }}{% endblock %}
+{% block content %}<section class="auth-section"><div class="auth-card suspended-card"><div class="auth-icon">⛔</div><h1>{{ ui.account_suspended }}</h1><p>{{ ui.suspended_text }}</p>{% if user.profile.suspension_reason %}<div class="message error">{{ user.profile.suspension_reason }}</div>{% endif %}<p class="muted">{{ ui.contact_admin }}</p><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="button" type="submit">{{ ui.logout }}</button></form></div></section>{% endblock %}

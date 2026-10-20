@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="{{ site_language }}" dir="{{ site_dir }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Pooran Daara - respectful multilingual social platform">
+    <title>{% block title %}Pooran Daara{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}">
+<header class="site-header">
+    <div class="container navbar">
+        <a class="brand" href="{% url 'landing' %}"><span class="brand-mark">P</span><span>Pooran Daara</span></a>
+        <button class="menu-toggle" type="button" aria-label="Menu" data-menu-toggle>☰</button>
+        <nav class="nav-links" data-menu>
+            {% if user.is_authenticated %}
+                <a href="{% url 'home' %}">{{ ui.home }}</a>
+                <a href="{% url 'conversation_list' %}" class="nav-badge-link">{{ ui.messages }}{% if unread_messages %}<span class="nav-badge">{{ unread_messages }}</span>{% endif %}</a>
+                <a href="{% url 'notifications' %}" class="nav-badge-link">{{ ui.notifications }}<span class="nav-badge" data-notification-count {% if not unread_notifications %}hidden{% endif %}>{{ unread_notifications }}</span></a>
+                <a href="{% url 'ai_tools' %}">{{ ui.ai_tools }}</a>
+                <a href="{% url 'profile' user.username %}">{{ ui.profile }}</a>
+                <form class="nav-search" method="get" action="{% url 'search' %}"><input type="search" name="q" placeholder="{{ ui.search_placeholder }}" aria-label="{{ ui.search }}"></form>
+                {% if user.is_staff %}<a href="{% url 'moderation_dashboard' %}">{{ ui.control_panel }}</a>{% endif %}
+                <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-button" type="submit">{{ ui.logout }}</button></form>
+            {% else %}
+                <a href="{% url 'login' %}">{{ ui.login }}</a>
+                <a class="button small" href="{% url 'register' %}">{{ ui.register }}</a>
+            {% endif %}
+            <form method="post" action="{% url 'set_language' %}" class="language-form">
+                {% csrf_token %}<input type="hidden" name="next" value="{{ request.path }}">
+                <select name="language" aria-label="{{ ui.language }}" onchange="this.form.submit()">
+                    {% for code, data in language_options.items %}<option value="{{ code }}" {% if code == site_language %}selected{% endif %}>{{ data.name }}</option>{% endfor %}
+                </select>
+            </form>
+        </nav>
+    </div>
+</header>
+
+{% if messages %}<div class="container messages">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+<div class="toast-stack" data-toast-stack aria-live="polite"></div>
+<main>{% block content %}{% endblock %}</main>
+<footer class="site-footer"><div class="container footer-grid"><div><strong>Pooran Daara</strong><p>{{ ui.site_tagline }}</p></div><div><p>© {% now "Y" %} {{ ui.all_rights }}</p></div></div></footer>
+<script src="{% static 'js/app.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

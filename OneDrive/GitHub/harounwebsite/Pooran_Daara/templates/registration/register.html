@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.register }} | Pooran Daara{% endblock %}
+{% block content %}<section class="auth-section"><div class="auth-card wide"><div class="auth-icon">👤</div><h1>{{ ui.register }}</h1><form method="post" class="stack-form two-columns">{% csrf_token %}{% for field in form %}<div class="field-wrap {% if field.name == 'username' or field.name == 'email' or field.name == 'password1' or field.name == 'password2' %}full-column{% endif %}">{{ field.label_tag }}{{ field }}{% if field.help_text %}<small>{{ field.help_text|safe }}</small>{% endif %}{{ field.errors }}</div>{% endfor %}<button class="button full-column" type="submit">{{ ui.register }}</button></form></div></section>{% endblock %}

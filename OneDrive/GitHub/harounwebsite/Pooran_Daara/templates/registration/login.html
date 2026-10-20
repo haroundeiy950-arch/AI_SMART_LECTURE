@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.login }} | Pooran Daara{% endblock %}
+{% block content %}<section class="auth-section"><div class="auth-card"><div class="auth-icon">🔐</div><h1>{{ ui.login }}</h1><form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}<button class="button full" type="submit">{{ ui.login }}</button></form><p class="auth-switch"><a href="{% url 'register' %}">{{ ui.register }}</a></p></div></section>{% endblock %}

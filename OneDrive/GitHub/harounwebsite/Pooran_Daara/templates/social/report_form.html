@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{{ ui.report_content }} | Pooran Daara{% endblock %}
+{% block content %}<section class="auth-section"><div class="auth-card"><div class="auth-icon">🚩</div><h1>{{ ui.report_content }}</h1><p class="muted">{{ target_type }} #{{ target.pk }}</p><form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button danger-button" type="submit">{{ ui.submit_report }}</button></form></div></section>{% endblock %}
