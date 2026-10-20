@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Live · {{ session.lecture.title }}{% endblock %}
+{% block content %}
+<div id="live-room-config" hidden
+     data-api="{% url 'live_api' session.code %}"
+     data-signals="{% url 'signal_api' session.code %}"
+     data-recording="{% url 'upload_recording' session.code %}"
+     data-csrf="{{ csrf_token }}"
+     data-user-id="{{ request.user.id }}"
+     data-lecturer="{% if is_lecturer %}true{% else %}false{% endif %}"></div>
+
+<header class="page-head">
+  <div><p class="eyebrow">● LIVE CLASSROOM</p><h1>{{ session.lecture.title }}</h1>
+    <p>Lecture code: <strong class="lecture-code">{{ session.code }}</strong></p></div>
+  <div class="live-actions">
+    <button id="camera-toggle" class="ghost" type="button">📷 Start camera</button>
+    <button id="speech-toggle" class="ghost" type="button">🎙 Start speech text</button>
+    {% if is_lecturer %}<button id="record-toggle" class="button" type="button">🔴 Start recording</button>
+    <button id="end-live" class="ghost" type="button">End lecture</button>
+    {% else %}<button id="raise-hand" class="ghost" type="button">✋ Raise hand</button>{% endif %}
+  </div>
+</header>
+
+<div id="permission-message" class="permission-message">Camera and microphone need browser permission. Use Edge/Chrome on localhost or HTTPS.</div>
+<div class="workspace live-workspace">
+  <section class="smart-board-stage">
+    {% if is_lecturer %}
+      <div class="toolbar">
+        <label>Color <input id="color" type="color" value="#101827"></label>
+        <label>Width <input id="width" type="range" min="1" max="18" value="4"></label>
+        <button id="eraser" type="button">Eraser</button><button id="clear" type="button">Clear</button>
+        <button id="network-diagram" type="button">Network Architecture</button>
+      </div>
+      <canvas id="board" width="1100" height="620"></canvas>
+    {% else %}<img id="live-board" class="live-board" alt="Live whiteboard">
+      <div class="waiting">The whiteboard updates automatically.</div>{% endif %}
+
+    <div id="camera-layer" class="camera-layer">
+      <video id="local-camera" autoplay muted playsinline></video>
+      <video id="remote-camera" autoplay playsinline></video>
+      <span id="camera-label">Camera</span>
+    </div>
+    <div id="live-caption" class="live-caption" aria-live="polite"></div>
+  </section>
+
+  <aside>
+    <div class="panel"><h3>Participants <span id="count"></span></h3><div id="participants"></div></div>
+    <div class="panel"><h3>Speech transcript</h3><div id="transcript" class="transcript">Press “Start speech text”.</div></div>
+    <div class="panel chat"><h3>Live chat</h3><div id="messages" role="log" aria-live="polite"></div>
+      <div class="chat-send"><input id="chat-text" maxlength="500" placeholder="Write a message or question" autocomplete="off">
+        <button id="send-chat" class="button small" type="button">Send</button></div></div>
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'live.js' %}"></script>{% endblock %}

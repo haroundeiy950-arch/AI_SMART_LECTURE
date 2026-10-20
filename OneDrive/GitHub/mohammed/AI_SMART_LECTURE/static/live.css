@@ -1,0 +1,19 @@
+.live-actions { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+.lecture-code { font-size:1.15rem; letter-spacing:.12em; background:#eef0ff; padding:7px 11px; border-radius:8px; }
+.permission-message,.error-message { padding:12px 16px; border-radius:10px; margin-bottom:15px; background:#fff4d8; border:1px solid #f1cf77; }
+.error-message { background:#ffe8e8; border-color:#efaaaa; color:#8a2020; }
+.smart-board-stage { position:relative; overflow:hidden; min-height:560px; background:rgba(255,255,255,.82); border:1px solid #deddd6; border-radius:16px; box-shadow:inset 0 0 60px rgba(91,92,226,.06); }
+.smart-board-stage canvas,.live-board { display:block; width:100%; min-height:500px; object-fit:contain; background:rgba(255,255,255,.72); }
+.camera-layer { display:none; position:absolute; right:22px; bottom:22px; width:min(30%,320px); aspect-ratio:16/9; border:2px solid rgba(255,255,255,.85); border-radius:16px; overflow:hidden; background:#131829; box-shadow:0 15px 40px rgba(0,0,0,.3); resize:both; }
+.camera-layer.active { display:block; }
+.camera-layer video { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+#camera-label { position:absolute; left:8px; bottom:7px; background:rgba(0,0,0,.58); color:#fff; padding:3px 7px; border-radius:5px; font-size:11px; }
+.live-caption { position:absolute; left:8%; right:8%; bottom:24px; text-align:center; background:rgba(16,24,39,.76); color:#fff; border-radius:10px; padding:9px 14px; font-size:18px; pointer-events:none; }
+.waiting { text-align:center; color:#667085; padding:9px; }
+.transcript { max-height:150px; white-space:pre-wrap; overflow:auto; color:#475467; }
+.chat #messages { height:230px; overflow:auto; border-bottom:1px solid #ddd; margin-bottom:10px; }
+.chat #messages p { margin:7px 0; }
+.chat-send { display:flex; gap:7px; }
+.live-workspace aside { max-height:720px; overflow:auto; }
+.live-workspace { grid-template-columns:minmax(0,3fr) minmax(290px,1fr); }
+@media(max-width:900px) { .live-workspace { grid-template-columns:1fr; } .camera-layer { width:42%; } .live-actions { justify-content:flex-start; } }
